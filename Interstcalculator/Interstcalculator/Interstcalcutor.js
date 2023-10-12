@@ -7,34 +7,34 @@ import {
   ListItemText,
   Button,
   Paper,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 
 import TextField from "@mui/material/TextField";
 
-const currencies = [
-  {
-    value: "year",
-    label: "year",
-  },
-  {
-    value: "month",
-    label: "month",
-  },
-];
 export default function Interest() {
   const [principal, setPrincipal] = useState(0);
   const [rate, setRate] = useState(12);
   const [time, setTime] = useState(1);
-  const [interest, setInterest] = useState(12);
-  const [totalAmount, setTotalAmount] = useState(12);
+  const [interest, setInterest] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [timeFrame, setTimeframe] = useState("month");
+  const selectHandler = (event) => {
+    setTimeframe(event.target.value);
+  };
+
   const result = () => {
-    const interest = principal * rate * time;
+    const currentTime = timeFrame === "year" ? time * 12 : time;
+    const interest = principal * rate * currentTime;
 
     setInterest(interest / 100);
     setTotalAmount(interest / 100 + principal);
   };
   return (
-    <Box>
+    <Box className="color">
       <Grid container>
         <Grid item xs={6}>
           <Paper
@@ -54,6 +54,7 @@ export default function Interest() {
                   id="standard-basic"
                   label="Principal($)"
                   variant="standard"
+                  className="txt"
                   onChange={(event) => setPrincipal(Number(event.target.value))}
                 />
               </Grid>
@@ -79,21 +80,17 @@ export default function Interest() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  id="outlined-select-currency-native"
-                  select
-                  label="Year"
-                  defaultValue="EUR"
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  {currencies.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="component-simple"></InputLabel>
+                  <Select
+                    label="year"
+                    onChange={selectHandler}
+                    value={timeFrame}
+                  >
+                    <MenuItem value="year">year</MenuItem>
+                    <MenuItem value="month">month</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container>
@@ -137,11 +134,14 @@ export default function Interest() {
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <Box style={{ marginTop: 100, marginLeft: -90 }}>
-            <typography style={{ color: "white", fontSize: 70 }}>
+          <Box style={{ marginTop: 120, marginLeft: -90 }}>
+            <typography style={{ color: "white", fontSize: 75 }}>
               SIMPLE INTEREST
             </typography>
-            <p style={{ fontSize: 80 }}>CALCULATOR</p>
+            <p>
+              {" "}
+              <typography style={{ fontSize: 95 }}>CALCULATOR</typography>
+            </p>
             <div style={{ background: "white", width: 550, height: 50 }}>
               <h3 style={{ marginLeft: 10, fontSize: 40 }}>
                 HTML,CSS & REACT.JS
